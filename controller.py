@@ -36,6 +36,7 @@ parser.add_argument('--no-anon-tts', dest='anon_tts', action='store_false')
 parser.set_defaults(anon_tts=True)
 parser.add_argument('--filter-url-tts', dest='filter_url_tts', action='store_true')
 parser.set_defaults(filter_url_tts=False)
+parser.add_argument('--callback-mod', dest='callback_mod', default=None)
 commandArgs = parser.parse_args()
 print commandArgs
 
@@ -61,6 +62,8 @@ server = "runmyrobot.com"
 tempDir = tempfile.gettempdir()
 print "temporary directory:", tempDir
 
+# callbackMod
+callbackMod = None
 
 # motor controller specific imports
 if commandArgs.type == 'none':
@@ -85,10 +88,13 @@ elif commandArgs.led == 'max7219':
     import spidev
 elif commandArgs.type == 'owi_arm':
     import owi_arm
+elif commandArgs.type == 'callback':
+    import importlib
+    callbackMod = importlib.import_module(commandArgs.callback_mod)
 else:
     print "invalid --type in command line"
     exit(0)
-    
+
 #serialDevice = '/dev/tty.usbmodem12341'
 #serialDevice = '/dev/ttyUSB0'
 
@@ -125,7 +131,7 @@ from socketIO_client import SocketIO, LoggingNamespace
 
 chargeIONumber = 17
 robotID = commandArgs.robot_id
-      
+
 if commandArgs.type == 'motor_hat':
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(chargeIONumber, GPIO.IN)
@@ -140,12 +146,12 @@ if commandArgs.type == 'l298n':
     if str(robotID) in gpio_config.sections():
         config_id = str(robotID)
     else:
-        config_id = 'default'		
+        config_id = 'default'
     StepPinForward = int(str(config[config_id]['StepPinForward']).split(',')[0]),int(str(config[config_id]['StepPinForward']).split(',')[1])
     StepPinBackward = int(str(config[config_id]['StepPinBackward']).split(',')[0]),int(str(config[config_id]['StepPinBackward']).split(',')[1])
     StepPinLeft = int(str(config[config_id]['StepPinLeft']).split(',')[0]),int(str(config[config_id]['StepPinLeft']).split(',')[1])
     StepPinRight = int(str(config[config_id]['StepPinRight']).split(',')[0]),int(str(config[config_id]['StepPinRight']).split(',')[1])
-	
+
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(StepPinForward, GPIO.OUT)
     GPIO.setup(StepPinBackward, GPIO.OUT)
@@ -162,7 +168,7 @@ if commandArgs.type == "pololu":
         print "cd /usr/local/src/drv8835-motor-driver-rpi && sudo python setup.py install"
         print "Running in test mode."
         print "Ctrl-C to quit"
-   
+
 if commandArgs.type == 'motozero':
     GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
@@ -201,7 +207,7 @@ if commandArgs.type == 'motozero':
 
     GPIO.setup(Motor2A,GPIO.OUT)
     GPIO.setup(Motor2B,GPIO.OUT)
-    GPIO.setup(Motor2Enable,GPIO.OUT) 
+    GPIO.setup(Motor2Enable,GPIO.OUT)
 
     GPIO.setup(Motor3A,GPIO.OUT)
     GPIO.setup(Motor3B,GPIO.OUT)
@@ -210,7 +216,7 @@ if commandArgs.type == 'motozero':
     GPIO.setup(Motor4A,GPIO.OUT)
     GPIO.setup(Motor4B,GPIO.OUT)
     GPIO.setup(Motor4Enable,GPIO.OUT)
-	
+
 
 #LED controlling
 if commandArgs.led == 'max7219':
@@ -221,7 +227,7 @@ if commandArgs.led == 'max7219':
     #DIN -> RPi Pin 19
     #CLK -> RPi Pin 23
     #CS -> RPi Pin 24
-    
+
     # decoding:BCD
     spi.writebytes([0x09])
     spi.writebytes([0x00])
@@ -238,7 +244,7 @@ if commandArgs.led == 'max7219':
     spi.writebytes([0x0f])
     spi.writebytes([0x00])
     columns = [0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8]
-    LEDOn = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF] 
+    LEDOn = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
     LEDOff = [0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
     LEDEmoteSmile = [0x0,0x0,0x24,0x0,0x42,0x3C,0x0,0x0]
     LEDEmoteSad = [0x0,0x0,0x24,0x0,0x0,0x3C,0x42,0x0]
@@ -249,19 +255,19 @@ if commandArgs.led == 'max7219':
         LEDEmoteSad = LEDEmoteSad[::-1]
         LEDEmoteTongue = LEDEmoteTongue[::-1]
         LEDEmoteSuprise = LEDEmoteSuprise[::-1]
-    
+
 def SetLED_On():
   if commandArgs.led == 'max7219':
     for i in range(len(columns)):
         spi.xfer([columns[i],LEDOn[i]])
 def SetLED_Off():
-  if commandArgs.led == 'max7219': 
+  if commandArgs.led == 'max7219':
     for i in range(len(columns)):
         spi.xfer([columns[i],LEDOff[i]])
 def SetLED_E_Smiley():
   if commandArgs.led == 'max7219':
     for i in range(len(columns)):
-        spi.xfer([columns[i],LEDEmoteSmile[i]]) 
+        spi.xfer([columns[i],LEDEmoteSmile[i]])
 def SetLED_E_Sad():
   if commandArgs.led == 'max7219':
     for i in range(len(columns)):
@@ -289,7 +295,7 @@ def SetLED_Full():
     # brightness MAX
     spi.writebytes([0x0a])
     spi.writebytes([0x0F])
-        
+
 SetLED_Off()
 
 steeringSpeed = 90
@@ -312,7 +318,7 @@ nightTimeDrivingSpeedActuallyUsed = commandArgs.night_speed
 if commandArgs.type == 'motor_hat':
     pwm = PWM(0x42)
 elif commandArgs.type == 'adafruit_pwm':
-    pwm = PWM(0x40) 
+    pwm = PWM(0x40)
 
 # Note if you'd like more debug output you can instead run:
 #pwm = PWM(0x40, debug=True)
@@ -352,8 +358,8 @@ if commandArgs.type == 'serial':
     #ser = serial.Serial('/dev/tty.usbmodem12341', 19200, timeout=1)  # open serial
     ser = serial.Serial(serialDevice, serialBaud, timeout=1)  # open serial
 
-    
-    
+
+
 print 'using socket io to connect to', server
 socketIO = SocketIO(server, port, LoggingNamespace)
 print 'finished using socket io to connect to', server
@@ -399,7 +405,7 @@ def isInternetConnected():
     except urllib2.URLError as err:
         return False
 
-    
+
 def configWifiLogin(secretKey):
 
     url = 'https://%s/get_wifi_login/%s' % (server, secretKey)
@@ -417,10 +423,10 @@ def configWifiLogin(secretKey):
 
         print "original(" + originalWPAText + ")"
         print "new(" + wpaText + ")"
-        
+
         if originalWPAText != wpaText:
 
-            wpaFile = open("/etc/wpa_supplicant/wpa_supplicant.conf", 'w')        
+            wpaFile = open("/etc/wpa_supplicant/wpa_supplicant.conf", 'w')
 
             print wpaText
             print
@@ -433,7 +439,7 @@ def configWifiLogin(secretKey):
             time.sleep(2)
             os.system("reboot")
 
-        
+
     except:
         print "exception while configuring setting wifi", url
         traceback.print_exc()
@@ -475,7 +481,7 @@ def incrementArmServo(channel, amount):
         armServo[channel] = servoMin[channel]
     pwm.setPWM(channel, 0, armServo[channel])
 
-        
+
 
 def times(lst, number):
     return [x*number for x in lst]
@@ -502,14 +508,14 @@ forward = json.loads(commandArgs.forward)
 backward = times(forward, -1)
 left = json.loads(commandArgs.left)
 right = times(left, -1)
-straightDelay = commandArgs.straight_delay 
+straightDelay = commandArgs.straight_delay
 turnDelay = commandArgs.turn_delay
 #Change sleeptime to adjust driving speed
 #Change rotatetimes to adjust the rotation. Will be multiplicated with sleeptime.
 l298n_sleeptime=0.2
 l298n_rotatetimes=5
 
-    
+
 def handle_exclusive_control(args):
         if 'status' in args and 'robot_id' in args and args['robot_id'] == robotID:
 
@@ -521,7 +527,7 @@ def handle_exclusive_control(args):
                 print "end exclusive control"
 
 
-                
+
 def say(message):
 
     tempFilePath = os.path.join(tempDir, "text_" + str(uuid.uuid4()))
@@ -531,11 +537,14 @@ def say(message):
 
 
     #os.system('"C:\Program Files\Jampal\ptts.vbs" -u ' + tempFilePath) Whaa?
-    
+
     if commandArgs.festival_tts:
         # festival tts
         os.system('festival --tts < ' + tempFilePath)
-    #os.system('espeak < /tmp/speech.txt')
+        #os.system('espeak < /tmp/speech.txt')
+
+    elif callbackMod is not None and hasattr(callbackMod, 'speak'):
+        callbackMod.speak(message, tempFilePath)
 
     else:
         # espeak tts
@@ -547,8 +556,8 @@ def say(message):
 
     os.remove(tempFilePath)
 
-    
-                
+
+
 def handle_chat_message(args):
 
     print "chat message received:", args
@@ -559,7 +568,7 @@ def handle_chat_message(args):
     if message[1] == ".":
        exit()
     elif commandArgs.anon_tts != True and args['anonymous'] == True:
-       exit()   
+       exit()
     elif commandArgs.filter_url_tts == True and re.search(urlRegExp, message):
        exit()
     else:
@@ -569,7 +578,7 @@ def handle_chat_message(args):
 
 def moveAdafruitPWM(command):
     print "move adafruit pwm command", command
-        
+
     if command == 'L':
         pwm.setPWM(1, 0, 300) # turn left
         pwm.setPWM(0, 0, 445) # drive forward
@@ -598,7 +607,7 @@ def moveAdafruitPWM(command):
         pwm.setPWM(1, 0, 400) # turn neurtral
         pwm.setPWM(0, 0, 335) # drive neutral
 
-        
+
     if command == 'F':
         pwm.setPWM(0, 0, 445) # drive forward
         time.sleep(0.3)
@@ -619,15 +628,15 @@ def moveAdafruitPWM(command):
         pwm.setPWM(2, 0, 400)
 
     if command == 'POS60':
-        pwm.setPWM(2, 0, 490)        
+        pwm.setPWM(2, 0, 490)
 
     if command == 'NEG60':
-        pwm.setPWM(2, 0, 100)                
+        pwm.setPWM(2, 0, 100)
 
 
 
-        
-    
+
+
 def moveGoPiGo(command):
     if command == 'L':
         gopigo.left_rot()
@@ -646,8 +655,8 @@ def moveGoPiGo(command):
         time.sleep(0.35)
         gopigo.stop()
 
-    
-                
+
+
 def handle_command(args):
         now = datetime.datetime.now()
         now_time = now.time()
@@ -678,23 +687,25 @@ def handle_command(args):
         #    print "args command:", args['command']
 
 
-            
+
         if 'command' in args and 'robot_id' in args and args['robot_id'] == robotID:
 
             print('got command', args)
 
             command = args['command']
 
+            if callbackMod is not None and hasattr(callbackMod, 'handle_command'):
+                callbackMod.handle_command(command, commandArgs, say)
+
             if commandArgs.type == 'adafruit_pwm':
                 moveAdafruitPWM(command)
-            
+
             if commandArgs.type == 'gopigo':
                 moveGoPiGo(command)
 
             if commandArgs.type == 'owi_arm':
                 owi_arm.handleOwiArm(command)
 
-            
             if commandArgs.type == 'serial':
                 sendSerialCommand(command)
 
@@ -746,13 +757,13 @@ def handle_command(args):
             if commandArgs.type == 'motor_hat':
                 turnOffMotors()
             if commandArgs.type == 'l298n':
-                runl298n(command)                                 
+                runl298n(command)
             #setMotorsToIdle()
             if commandArgs.type == 'motozero':
                 runmotozero(command)
 	        if commandArgs.type == 'pololu':
 		        runPololu(command)
-            
+
             if commandArgs.led == 'max7219':
                 if command == 'LED_OFF':
                     SetLED_Off()
@@ -876,7 +887,7 @@ def runmotozero(direction):
         GPIO.output(Motor1B, GPIO.LOW)
         GPIO.output(Motor2A, GPIO.LOW)
         GPIO.output(Motor4A, GPIO.LOW)
-	
+
 def runPololu(direction):
     drivingSpeed = commandArgs.driving_speed
     if direction == 'F':
@@ -903,7 +914,7 @@ def handleStartReverseSshProcess(args):
     socketIO.emit("reverse_ssh_info", "return code: " + str(returnCode))
     print "reverse ssh process has exited with code", str(returnCode)
 
-    
+
 def handleEndReverseSshProcess(args):
     print "handling end reverse ssh process"
     resultCode = subprocess.call(["killall", "ssh"])
@@ -918,7 +929,7 @@ def on_handle_exclusive_control(*args):
 def on_handle_chat_message(*args):
    thread.start_new_thread(handle_chat_message, args)
 
-   
+
 #from communication import socketIO
 socketIO.on('command_to_robot', on_handle_command)
 socketIO.on('exclusive_control', on_handle_exclusive_control)
@@ -944,7 +955,7 @@ if commandArgs.type == 'motor_hat':
         # create a default object, no changes to I2C address or frequency
         mh = Adafruit_MotorHAT(addr=0x60)
         #mhArm = Adafruit_MotorHAT(addr=0x61)
-    
+
 
 def turnOffMotors():
     mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
@@ -955,7 +966,7 @@ def turnOffMotors():
     #mhArm.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
     #mhArm.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
     #mhArm.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
-  
+
 
 if commandArgs.type == 'motor_hat':
     if motorsEnabled:
@@ -1007,7 +1018,7 @@ elif platform.system() == 'Linux':
 
 
 lastInternetStatus = False
-    
+
 while True:
     socketIO.wait(seconds=10)
 
@@ -1023,12 +1034,12 @@ while True:
     if commandArgs.auto_wifi:
         if commandArgs.secret_key is not None:
             configWifiLogin(commandArgs.secret_key)
-    
+
     if (waitCounter % 6) == 0:
 
         # tell the server what robot id is using this connection
         identifyRobotId()
-        
+
         if platform.system() == 'Linux':
             ipInfoUpdate()
 
