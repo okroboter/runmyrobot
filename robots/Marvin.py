@@ -114,6 +114,8 @@ def handle_command(command, commandArgs, say):
         sendSerial('C')
     elif command == 'M':
         sendSerial('M')
+    elif command == 'X':
+        sendSerial('X')
     elif command == 'T':
         curToggleTime = time.time()
         # Throttle changing the lights, so we don't skip one
