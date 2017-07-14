@@ -62,7 +62,7 @@ tempDir = tempfile.gettempdir()
 print "temporary directory:", tempDir
 
 # Callback module for importing robots
-callbackModule = None
+robotModule = None
 
 # motor controller specific imports
 if commandArgs.type == 'none':
@@ -89,7 +89,7 @@ elif commandArgs.type == 'owi_arm':
     import owi_arm
 elif commandArgs.type.startswith('robots.'):
     import importlib
-    callbackModule = importlib.import_module(commandArgs.type)
+    robotModule = importlib.import_module(commandArgs.type)
 else:
     print "invalid --type in command line"
     exit(0)
@@ -542,8 +542,8 @@ def say(message):
         os.system('festival --tts < ' + tempFilePath)
         #os.system('espeak < /tmp/speech.txt')
 
-    elif callbackModule is not None and hasattr(callbackModule, 'speak'):
-        callbackModule.speak(message, tempFilePath)
+    elif robotModule is not None and hasattr(robotModule, 'speak'):
+        robotModule.speak(message, tempFilePath)
 
     else:
         # espeak tts
@@ -693,8 +693,8 @@ def handle_command(args):
 
             command = args['command']
 
-            if callbackModule is not None and hasattr(callbackModule, 'handle_command'):
-                callbackModule.handle_command(command, commandArgs, say)
+            if robotModule is not None and hasattr(robotModule, 'handle_command'):
+                robotModule.handle_command(command, commandArgs, say)
 
             if commandArgs.type == 'adafruit_pwm':
                 moveAdafruitPWM(command)
