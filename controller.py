@@ -36,7 +36,6 @@ parser.add_argument('--no-anon-tts', dest='anon_tts', action='store_false')
 parser.set_defaults(anon_tts=True)
 parser.add_argument('--filter-url-tts', dest='filter_url_tts', action='store_true')
 parser.set_defaults(filter_url_tts=False)
-parser.add_argument('--callback-mod', dest='callback_mod', default=None)
 commandArgs = parser.parse_args()
 print commandArgs
 
@@ -62,8 +61,8 @@ server = "runmyrobot.com"
 tempDir = tempfile.gettempdir()
 print "temporary directory:", tempDir
 
-# callbackMod
-callbackMod = None
+# Callback module for importing robots
+callbackModule = None
 
 # motor controller specific imports
 if commandArgs.type == 'none':
@@ -88,9 +87,9 @@ elif commandArgs.led == 'max7219':
     import spidev
 elif commandArgs.type == 'owi_arm':
     import owi_arm
-elif commandArgs.type == 'callback':
+elif commandArgs.type.startswith('robots/')
     import importlib
-    callbackMod = importlib.import_module(commandArgs.callback_mod)
+    callbackModule = importlib.import_module(commandArgs.type)
 else:
     print "invalid --type in command line"
     exit(0)
@@ -543,8 +542,8 @@ def say(message):
         os.system('festival --tts < ' + tempFilePath)
         #os.system('espeak < /tmp/speech.txt')
 
-    elif callbackMod is not None and hasattr(callbackMod, 'speak'):
-        callbackMod.speak(message, tempFilePath)
+    elif callbackModule is not None and hasattr(callbackModule, 'speak'):
+        callbackModule.speak(message, tempFilePath)
 
     else:
         # espeak tts
@@ -694,8 +693,8 @@ def handle_command(args):
 
             command = args['command']
 
-            if callbackMod is not None and hasattr(callbackMod, 'handle_command'):
-                callbackMod.handle_command(command, commandArgs, say)
+            if callbackModule is not None and hasattr(callbackModule, 'handle_command'):
+                callbackModule.handle_command(command, commandArgs, say)
 
             if commandArgs.type == 'adafruit_pwm':
                 moveAdafruitPWM(command)
