@@ -87,7 +87,7 @@ elif commandArgs.led == 'max7219':
     import spidev
 elif commandArgs.type == 'owi_arm':
     import owi_arm
-elif commandArgs.type.startswith('robots/')
+elif commandArgs.type.startswith('robots.'):
     import importlib
     callbackModule = importlib.import_module(commandArgs.type)
 else:
