@@ -54,6 +54,11 @@ marvinQuotes = [
     "The best conversation I had was over forty million years ago. And that was with a coffee machine."
 ]
 
+# Current index
+marvinQuotesIndex = 0
+
+# Resort quotes randomly
+random.shuffle(marvinQuotes)
 
 def speak(message, tempFilePath):
     """
@@ -81,6 +86,7 @@ def handle_command(command, commandArgs, say):
     global marvinLastToggleTime
     global marvinLastQuoteTime
     global marvinWaitSeconds
+    global marvinQuotesIndex
 
     proximity_alert = ""
 
@@ -130,9 +136,16 @@ def handle_command(command, commandArgs, say):
     if marvinLastQuoteTime == 0 or (curQuoteTime - marvinLastQuoteTime) > marvinWaitSeconds:
         # Randomly determine if we should say anything
         if (bool(random.getrandbits(1))):
+
+            if marvinQuotesIndex >= len(marvinQuotesIndex):
+                marvinQuotesIndex = 0
+                random.shuffle(marvinQuotes)
+
             # Say something oblique
             try:
-                threadArgs = (random.sample(marvinQuotes, 1)[0],)
+                # threadArgs = (random.sample(marvinQuotes, 1)[0],)
+                threadArgs = (marvinQuotes[marvinQuotesIndex], )
+                marvinQuotesIndex += 1
                 thread.start_new_thread(say, threadArgs)
                 # say(random.sample(marvinQuotes, 1)[0])
             except Exception, err:
