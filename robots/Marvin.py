@@ -93,7 +93,7 @@ def speak(message, tempFilePath):
 
         except Exception, err:
             print err
-            os.system('echo "Uh oh! There was an error."' + pipes)
+            os.system('echo "There was an error. I cannot answer that question."' + pipes)
 
     else:
         # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
