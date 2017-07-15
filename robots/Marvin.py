@@ -76,20 +76,23 @@ def speak(message, tempFilePath):
     # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
     pipes = ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0'
 
-    if message.startswith("Marvin, tell me:") and os.environ("WOLFRAM_ID"):
+    if message.strip().startswith("Marvin? ") and os.environ["WOLFRAM_ID"]:
 
         try:
-            client = wolframalpha.Client(os.environ("WOLFRAM_ID"))
-            result = client.query(message[16:])
+            os.system('echo "Let me check on that for you. Thinking..."' + pipes)
+            client = wolframalpha.Client(os.environ["WOLFRAM_ID"])
+            result = client.query(message[9:])
             # Get the first result
             result = next(result.results).text
             if result:
                 result = result.encode("ascii", "text")
+                print result
                 os.system('echo "' + result + '"' + pipes)
             else:
                 os.system('echo "I don\'t know what you mean"' + pipes)
 
         except Exception, err:
+            print err
             os.system('echo "Uh oh! There was an error."' + pipes)
 
     else:
