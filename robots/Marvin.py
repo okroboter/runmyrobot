@@ -80,6 +80,7 @@ def speak(message, tempFilePath):
 
         try:
             os.system('echo "Let me check on that for you. Thinking..."' + pipes)
+            sendSerial("?")
             client = wolframalpha.Client(os.environ["WOLFRAM_ID"])
             result = client.query(message[9:])
             # Get the first result
@@ -93,6 +94,8 @@ def speak(message, tempFilePath):
         except Exception, err:
             print err
             os.system('echo "There was an error. I cannot answer that question."' + pipes)
+        finally:
+            sendSerial('#');
 
     else:
         # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
