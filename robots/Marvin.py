@@ -4,6 +4,8 @@ import serial
 import random
 import thread
 import Robot
+import wolframalpha
+
 LEFT_TRIM   = 0
 RIGHT_TRIM  = 0
 
@@ -71,7 +73,28 @@ def speak(message, tempFilePath):
 
     # The AdaFruit speaker bonnet doesn't support mono files, so need to convert the mono file
     # from espeak into a stereo version that aplay can work with. NOTE: the ffmpeg path must be a full path.
-    os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
+    # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
+    pipes = ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
+
+    if message.startswith("Marvin, tell me:") and os.environ("WOLFRAM_ID"):
+
+        try:
+            client = wolframalpha.Client(os.environ("WOLFRAM_ID"))
+            result = client.query(message[16:])
+            # Get the first result
+            result = next(result.results).text
+            if result:
+                result = result.encode("ascii", "text")
+                os.system('echo "' + result + '"' + pipes)
+            else:
+                os.system('echo "I don\'t know what you mean"' + pipes)
+
+        except Exception, err:
+            os.system('echo "Uh oh! There was an error."' + pipes)
+
+    else:
+        # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
+        os.system('cat ' + tempFilePath + pipes)
 
 def handle_command(command, commandArgs, say):
     """
