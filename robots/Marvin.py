@@ -165,7 +165,7 @@ def handle_command(command, commandArgs, say):
         # Randomly determine if we should say anything
         if (bool(random.getrandbits(1))):
 
-            if marvinQuotesIndex >= len(marvinQuotesIndex):
+            if marvinQuotesIndex >= marvinQuotesIndex:
 
                 marvinQuotesIndex = 0
                 random.shuffle(marvinQuotes)
