@@ -26,12 +26,12 @@ def processSignals():
 
         if commandArgs.wifi is not None:
 
-            wifiStrength = int(subprocess.Popen("/sbin/iwconfig %s | grep Link | grep -oE -- '-[0-9]{2}'",
+            wifiStrength = int(subprocess.Popen("/sbin/iwconfig %s | grep Link | grep -oE -- '-[0-9]{2}'" % commandArgs.wifi,
                                                 shell=True,
                                                 stdout=subprocess.PIPE,
                                                 stderr=subprocess.STDOUT).stdout.readlines()[0].strip())
 
-            for level, dbStrength in wifiLevels:
+            for level, dbStrength in enumerate(wifiLevels):
                 if wifiStrength <= dbStrength and currentWifiLevel != level:
                     currentWifiLevel = level
                     copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")
