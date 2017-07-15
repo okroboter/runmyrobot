@@ -85,8 +85,7 @@ def speak(message, tempFilePath):
             # Get the first result
             result = next(result.results).text
             if result:
-                result = result.encode("ascii", "text")
-                print result
+                result = result.encode("ascii", errors="ignore")
                 os.system('echo "' + result + '"' + pipes)
             else:
                 os.system('echo "I don\'t know what you mean"' + pipes)
