@@ -26,10 +26,18 @@ def processSignals():
 
         if commandArgs.wifi is not None:
 
-            wifiStrength = int(subprocess.Popen("/sbin/iwconfig %s | grep Link | grep -oE -- '-[0-9]{2}'" % commandArgs.wifi,
-                                                shell=True,
-                                                stdout=subprocess.PIPE,
-                                                stderr=subprocess.STDOUT).stdout.readlines()[0].strip())
+            wifiStrength, perr = subprocess.Popen('/sbin/iwconfig %s | grep Signal|cut -d"=" -f3|cut -d" " -f1' % commandArgs.wifi,
+                shell=True,
+                stdout=subprocess.PIPE).communicate()
+
+            if wifiStrength.strip() == "100/100":
+                wifiStrength = 100
+            else:
+                try:
+                    wifiStrength = int(wifiStrength)
+                    print wifiStrength
+                except Exception, err:
+                    wifiStrength = -100
 
             for level, dbStrength in enumerate(wifiLevels):
                 if wifiStrength <= dbStrength and currentWifiLevel != level:

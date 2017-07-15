@@ -105,7 +105,7 @@ def getWithRetry(url):
 
 
 
-    
+
 
 def getVideoPort():
 
@@ -136,7 +136,7 @@ def randomSleep():
     timeToWait = random.choice((0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5))
     print "sleeping", timeToWait
     time.sleep(timeToWait)
-                   
+
 
 
 def startVideoCaptureLinux():
@@ -158,16 +158,16 @@ def startVideoCaptureLinux():
         print "saturation"
         os.system("v4l2-ctl -c saturation={saturation}".format(saturation=commandArgs.saturation))
 
-    
+
     videoCommandLine = '/usr/local/bin/ffmpeg -f v4l2 -framerate 25 -video_size 640x480 -i /dev/video{video_device_number} {rotation_option} -f mpegts -codec:v mpeg1video -s {xres}x{yres} -b:v {kbps}k -bf 0 -muxdelay 0.001 http://{server}:{video_port}/hello/{xres}/{yres}/'.format(video_device_number=commandArgs.video_device_number, rotation_option=rotationOption(), kbps=commandArgs.kbps, server=server, video_port=videoPort, xres=commandArgs.xres, yres=commandArgs.yres)
     print videoCommandLine
     return subprocess.Popen(shlex.split(videoCommandLine))
-    
+
 
 def startAudioCaptureLinux():
 
     audioPort = getAudioPort()
-    
+
     audioCommandLine = '/usr/local/bin/ffmpeg -f alsa -ar 44100 -ac %d -i hw:1 -f mpegts -codec:a mp2 -b:a 32k -muxdelay 0.001 http://%s:%s/hello/640/480/' % (commandArgs.mic_channels, server, audioPort)
     print audioCommandLine
     return subprocess.Popen(shlex.split(audioCommandLine))
@@ -177,7 +177,8 @@ def startAudioCaptureLinux():
 def rotationOption():
 
     if commandArgs.video_filter is not None:
-        return "-vf %s" % commandArgs.video_filter
+        # return "-vf %s" % commandArgs.video_filter
+        return commandArgs.video_filter
     elif commandArgs.rotate180:
         return "-vf transpose=2,transpose=2"
     else:
@@ -203,7 +204,7 @@ def onCommandToRobot(*args):
                 print ('enabling camera capture process')
                 print "args", args
                 camera_on = True
-        
+
         sys.stdout.flush()
 
 
@@ -217,16 +218,16 @@ def main():
 
     global robotID
     global camera_on
-    robotID = getRobotID()    
+    robotID = getRobotID()
 
     socketIO.on('command_to_robot', onCommandToRobot)
-    socketIO.on('connection', onConnection)    
+    socketIO.on('connection', onConnection)
 
 
     print "robot id:", robotID
     sys.stdout.flush()
 
-    
+
     if camera_on:
         if not commandArgs.dry_run:
             videoProcess = startVideoCaptureLinux()
@@ -248,13 +249,13 @@ def main():
 
     count = 0
 
-    
+
     # loop forever and monitor status of ffmpeg processes
     while True:
 
 
         print "------------------------------------------" + str(count) + "-----------------------------------------------------"
-        
+
         socketIO.wait(seconds=1)
 
 
@@ -266,7 +267,7 @@ def main():
         socketIO.emit('send_video_status', {'send_video_process_exists': True,
                                             'ffmpeg_process_exists': True,
                                             'camera_id':commandArgs.camera_id})
-       
+
         if count % 20 == 0:
             try:
                 with os.fdopen(os.open('/tmp/send_video_summary.txt', os.O_WRONLY | os.O_CREAT, 0o777), 'w') as statusFile:
@@ -279,13 +280,13 @@ def main():
                 print "status file could not be written"
                 traceback.print_exc()
                 sys.stdout.flush()
-                
-                
-        
-        
-        
+
+
+
+
+
         if camera_on:
-        
+
             print "video process poll", videoProcess.poll(), "pid", videoProcess.pid, "restarts", numVideoRestarts
 
             # restart video if needed
@@ -293,8 +294,8 @@ def main():
                 randomSleep()
                 videoProcess = startVideoCaptureLinux()
                 numVideoRestarts += 1
-            
-                
+
+
         if mic_on:
 
             print "audio process poll", audioProcess.poll(), "pid", audioProcess.pid, "restarts", numAudioRestarts
@@ -304,13 +305,13 @@ def main():
                 randomSleep()
                 audioProcess = startAudioCaptureLinux()
                 #time.sleep(30)
-                #socketIO.emit('send_video_process_start_event', {'camera_id': commandArgs.camera_id})               
+                #socketIO.emit('send_video_process_start_event', {'camera_id': commandArgs.camera_id})
                 numAudioRestarts += 1
 
-        
+
         count += 1
 
-        
+
 main()
 
 
