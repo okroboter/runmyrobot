@@ -74,7 +74,7 @@ def speak(message, tempFilePath):
     # The AdaFruit speaker bonnet doesn't support mono files, so need to convert the mono file
     # from espeak into a stereo version that aplay can work with. NOTE: the ffmpeg path must be a full path.
     # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
-    pipes = ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
+    pipes = ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0'
 
     if message.startswith("Marvin, tell me:") and os.environ("WOLFRAM_ID"):
 
