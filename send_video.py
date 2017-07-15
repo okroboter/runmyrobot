@@ -42,7 +42,8 @@ parser.set_defaults(camera_enabled=True)
 parser.add_argument('--dry-run', dest='dry_run', action='store_true')
 parser.add_argument('--mic-channels', type=int, help='microphone channels, typically 1 or 2', default=1)
 parser.add_argument('--audio-input-device', default='Microphone (HD Webcam C270)') # currently, this option is only used for windows screen capture
-
+parser.add_argument('--vf, dest=video_filter')
+parser.set_defaults(video_filter=None)
 
 #global numVideoRestarts
 #numVideoRestarts = 0
@@ -175,7 +176,9 @@ def startAudioCaptureLinux():
 
 def rotationOption():
 
-    if commandArgs.rotate180:
+    if commandArgs.video_filter is not None:
+        return "-vf %s" % commandArgs.video_filter
+    elif commandArgs.rotate180:
         return "-vf transpose=2,transpose=2"
     else:
         return ""
