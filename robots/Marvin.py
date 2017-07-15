@@ -166,6 +166,7 @@ def handle_command(command, commandArgs, say):
         if (bool(random.getrandbits(1))):
 
             if marvinQuotesIndex >= len(marvinQuotesIndex):
+
                 marvinQuotesIndex = 0
                 random.shuffle(marvinQuotes)
 

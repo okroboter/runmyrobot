@@ -176,13 +176,15 @@ def startAudioCaptureLinux():
 
 def rotationOption():
 
-    if commandArgs.video_filter is not None:
-        # return "-vf %s" % commandArgs.video_filter
-        return commandArgs.video_filter
-    elif commandArgs.rotate180:
-        return "-vf transpose=2,transpose=2"
-    else:
-        return ""
+    return '-f image2pipe -i /home/pi/runmyrobot/overlay/g_rating_kids.png -filter_complex "transpose=2,transpose=2,overlay=10:10"'
+
+    # if commandArgs.video_filter is not None:
+    #     # return "-vf %s" % commandArgs.video_filter
+    #     return commandArgs.video_filter
+    # elif commandArgs.rotate180:
+    #     return "-vf transpose=2,transpose=2"
+    # else:
+    #     return ""
 
 
 def onCommandToRobot(*args):
