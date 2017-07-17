@@ -12,24 +12,26 @@ parser.set_defaults(wifi=None)
 
 commandArgs = parser.parse_args()
 
-wifiLevels = [-90, -80, -70, -50, 0]
+wifiLevels = [-90, -80, -70, -60, 0]
 wifiOverlays = [8, 9, 10, 11, 12]
 currentWifiLevel = 0
 
 bindAddress = "tcp://localhost:5555"
 
-context = zmq.Context()
-requester = context.socket(zmq.REQ)
-requester.connect(bindAddress)
-
-def clearSignals():
+def clearSignals(requester):
 
     for level in wifiOverlays:
-        requester.send("Parsed_overlay_%d enable 0" % wifiOverlays[level])
+        requester.send("Parsed_overlay_%d enable 0" % level)
+        message = requester.recv()
+        print 'Received reply:[%s]' % message
 
 def processSignals():
 
     global currentWifiLevel
+
+    context = zmq.Context()
+    requester = context.socket(zmq.REQ)
+    requester.connect(bindAddress)
 
     while True:
 
@@ -48,21 +50,30 @@ def processSignals():
                 except Exception, err:
                     wifiStrength = -100
 
+            print "Current Level: %d\n" % currentWifiLevel
+
             for level, dbStrength in enumerate(wifiLevels):
                 if wifiStrength <= dbStrength and currentWifiLevel != level:
-                    clearSignals()
+                    clearSignals(requester)
                     currentWifiLevel = level
+                    print "New Level: %d\n" % currentWifiLevel
                     requester.send("Parsed_overlay_%d enable 1" % wifiOverlays[level])
+                    message = requester.recv()
+                    print 'Received reply:[%s]' % message
                     # copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")
                     break
                 elif dbStrength == 0 and currentWifiLevel != len(wifiLevels) - 1:
+                    clearSignals(requester)
                     currentWifiLevel = level
-                    requester.send("Parsed_overlay_% enable 1" % wifiOverlays[len(wifiOverlays) - 1])
+                    print "New Level: %d\n" % currentWifiLevel
+                    requester.send("Parsed_overlay_% enable 1" % wifiOverlays[wifiOverlays])
+                    message = requester.recv()
+                    print 'Received reply:[%s]' % message
                     # copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")
 
             print "Wifi level: %d dBm" % wifiStrength
 
-        time.sleep(1)
+        time.sleep(2)
 
 process = Process(target=processSignals)
 process.start()
