@@ -134,6 +134,7 @@ def handle_command(command, commandArgs, say):
                     say("Proximity alert!")
                 ser.flushInput()
                 break
+
     elif command == 'B':
         robot.backward(commandArgs.driving_speed, commandArgs.straight_delay)
     elif command == 'N':

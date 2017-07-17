@@ -176,7 +176,47 @@ def startAudioCaptureLinux():
 
 def rotationOption():
 
-    return '-f image2pipe -i /home/pi/runmyrobot/overlay/g_rating_kids.png -filter_complex "transpose=2,transpose=2,overlay=10:10"'
+    # return '-f image2pipe -i /home/pi/runmyrobot/overlay/g_rating_kids.png -filter_complex "transpose=2,transpose=2,overlay=10:10"'
+
+    # Add all overlay inputs, then stack them on top of each other
+    # Add zmq to send dynamic messages via a message queue
+    # Disable all overlays by default
+    # Enable them in zmq by referring to them as Parse_overlay_i
+    # where i equals the filter position (1-based).
+    # For example, "Parsed_overlay_3 enable 1" will enable wifi_0.png
+    #
+    # return '-i /home/pi/runmyrobot/overlay/wifi_0.png \
+    #     -i /home/pi/runmyrobot/overlay/wifi_1.png \
+    #     -i /home/pi/runmyrobot/overlay/wifi_2.png \
+    #     -i /home/pi/runmyrobot/overlay/wifi_3.png \
+    #     -i /home/pi/runmyrobot/overlay/wifi_4.png \
+    #     -filter_complex "[0:v]transpose=2,transpose=2[flip]; \
+    #     [flip]zmq[main]; \
+    #     [main][1:v]overlay=enable=0:x=10:y=10 [ov3]; \
+    #     [ov3][2:v]overlay=enable=0:x=10:y=10[ov4]; \
+    #     [ov4][3:v]overlay=enable=0:x=10:y=10[ov5]; \
+    #     [ov5][4:v]overlay=enable=0:x=10:y=10[ov6]; \
+    #     [ov6][5:v]overlay=enable=0:x=10:y=10"'
+
+    # Using a sprite
+    # Create crop points for each image in the sprite,
+    # Then create overlay for each cropped point
+    # Enable/disable the overlays y referring to them as Parsed_overlay_i
+    # where is the filter position (1-based)
+    # Example: Parsed_overlay_8 enable 1, would enable the first crop point
+    return '-i /home/pi/runmyrobot/overlay/wifi_sprite.png \
+        -filter_complex "[0:v]transpose=2,transpose=2[flip]; \
+        [flip]zmq[main]; \
+        [1:v]crop=80:57:0:0[im1]; \
+        [1:v]crop=80:57:80:0[im2]; \
+        [1:v]crop=80:57:160:0[im3]; \
+        [1:v]crop=80:57:240:0[im4]; \
+        [1:v]crop=80:57:320:0[im5]; \
+        [main][im1]overlay=enable=0:x=10:y=10 [ov8]; \
+        [ov8][im2]overlay=enable=0:x=10:y=10[ov9]; \
+        [ov9][im3]overlay=enable=0:x=10:y=10[ov10]; \
+        [ov10][im4]overlay=enable=0:x=10:y=10[ov11]; \
+        [ov11][im5]overlay=enable=0:x=10:y=10"'
 
     # if commandArgs.video_filter is not None:
     #     # return "-vf %s" % commandArgs.video_filter
