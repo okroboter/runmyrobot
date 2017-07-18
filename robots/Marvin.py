@@ -162,7 +162,7 @@ def handle_command(command, commandArgs, say):
             sendSerial("@%d" % marvinLastColor)
             # Write the color to a file for the overlay
             with open("/dev/shm/lights.txt", "w") as f:
-               f.write(marvinLastColor)
+               f.write("%d\n" % marvinLastColor)
 
         marvinLastToggleTime = curToggleTime
     elif command.startswith('@'):

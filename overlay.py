@@ -19,7 +19,7 @@ wifiLevels = [-90, -80, -70, -60, 0]
 wifiOverlays = [14, 15, 16, 17, 18]
 lightOverlays = [19, 20, 21, 22, 23, 24]
 currentWifiLevel = 0
-currentColorLevel = 0
+currentColorLevel = -1 
 
 bindAddress = "tcp://localhost:5555"
 
@@ -55,12 +55,15 @@ def processSignals():
             with open("/dev/shm/lights.txt", "r") as f:
                 try:
                     color = int(f.read(1))
-                except:
+                except Exception, err:
+                    print "Exception reading file: %s" % err
                     color = 0
 
-            if color <= 5 and currentWifiLevel != color:
+            if 5 >= color != currentColorLevel:
 
-                requester.send("Parsed_overlay_%d enable 1" % wifiOverlays[level])
+                clearLights(requester)
+                currentColorLevel = color
+                requester.send("Parsed_overlay_%d enable 1" % lightOverlays[color])
                 message = requester.recv()
                 print 'Received reply:[%s]' % message
 
@@ -78,7 +81,8 @@ def processSignals():
                     wifiStrength = int(wifiStrength)
                     print wifiStrength
                 except Exception, err:
-                    wifiStrength = -100
+                    print "Exception %s" % err
+                    wifiStrength = 100
 
             print "Current Level: %d\n" % currentWifiLevel
 
@@ -95,8 +99,8 @@ def processSignals():
                 elif dbStrength == 0 and currentWifiLevel != len(wifiLevels) - 1:
                     clearSignals(requester)
                     currentWifiLevel = level
-                    print "New Level: %d\n" % currentWifiLevel
-                    requester.send("Parsed_overlay_% enable 1" % wifiOverlays[level])
+                    print "New Max Level: %d\n" % currentWifiLevel
+                    requester.send("Parsed_overlay_%d enable 1" % wifiOverlays[len(wifiOverlays)-1])
                     message = requester.recv()
                     print 'Received reply:[%s]' % message
                     # copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")

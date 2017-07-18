@@ -225,12 +225,12 @@ def rotationOption():
             '[ov15][im3]overlay=enable=0:x=10:y=10[ov16]; '
             '[ov16][im4]overlay=enable=0:x=10:y=10[ov17]; '
             '[ov17][im5]overlay=enable=0:x=10:y=10[ov18]; '
-            '[ov18][im6]overlay=enable=0:x=35:y=75[ov19]; '
-            '[ov19][im7]overlay=enable=0:x=35:y=75[ov20]; '
-            '[ov20][im8]overlay=enable=0:x=35:y=75[ov21]; '
-            '[ov21][im9]overlay=enable=0:x=35:y=75[ov22]; '
-            '[ov22][im10]overlay=enable=0:x=35:y=75[ov23]; '
-            '[ov23][im11]overlay=enable=0:x=35:y=75"')
+            '[ov18][im6]overlay=enable=0:x=37:y=75[ov19]; '
+            '[ov19][im7]overlay=enable=0:x=37:y=75[ov20]; '
+            '[ov20][im8]overlay=enable=0:x=37:y=75[ov21]; '
+            '[ov21][im9]overlay=enable=0:x=37:y=75[ov22]; '
+            '[ov22][im10]overlay=enable=0:x=37:y=75[ov23]; '
+            '[ov23][im11]overlay=enable=0:x=37:y=75"')
 
 
     # if commandArgs.video_filter is not None:
