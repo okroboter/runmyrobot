@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00f6e788-00fd-4c19-b336-243a426623b4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/overlay.py" afterPath="$PROJECT_DIR$/overlay.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robots/Marvin.py" afterPath="$PROJECT_DIR$/robots/Marvin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/send_video.py" afterPath="$PROJECT_DIR$/send_video.py" />
     </list>
     <ignored path="runmyrobot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +25,8 @@
       <file leaf-file-name="overlay.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/overlay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
-              <caret line="98" column="82" lean-forward="false" selection-start-line="98" selection-start-column="82" selection-end-line="98" selection-end-column="82" />
+            <state relative-caret-position="255">
+              <caret line="17" column="35" lean-forward="false" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -764,8 +761,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/overlay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="98" column="82" lean-forward="false" selection-start-line="98" selection-start-column="82" selection-end-line="98" selection-end-column="82" />
+        <state relative-caret-position="255">
+          <caret line="17" column="35" lean-forward="false" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

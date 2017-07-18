@@ -16,8 +16,8 @@ parser.set_defaults(lights=False)
 commandArgs = parser.parse_args()
 
 wifiLevels = [-90, -80, -70, -60, 0]
-wifiOverlays = [8, 9, 10, 11, 12]
-lightOverlays = [8, 9, 10, 11, 12]
+wifiOverlays = [14, 15, 16, 17, 18]
+lightOverlays = [19, 20, 21, 22, 23, 24]
 currentWifiLevel = 0
 currentColorLevel = 0
 
