@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00f6e788-00fd-4c19-b336-243a426623b4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/overlay.py" afterPath="$PROJECT_DIR$/overlay.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robots/Marvin.py" afterPath="$PROJECT_DIR$/robots/Marvin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/send_video.py" afterPath="$PROJECT_DIR$/send_video.py" />
     </list>
     <ignored path="runmyrobot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="overlay.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="overlay.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/overlay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="20" lean-forward="false" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+            <state relative-caret-position="690">
+              <caret line="46" column="24" lean-forward="false" selection-start-line="46" selection-start-column="24" selection-end-line="46" selection-end-column="24" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -40,17 +37,17 @@
       <file leaf-file-name="send_video.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/send_video.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2503">
-              <caret line="214" column="47" lean-forward="false" selection-start-line="214" selection-start-column="47" selection-end-line="214" selection-end-column="47" />
+            <state relative-caret-position="228">
+              <caret line="215" column="47" lean-forward="false" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Marvin.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Marvin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
+            <state relative-caret-position="871">
               <caret line="135" column="63" lean-forward="false" selection-start-line="135" selection-start-column="63" selection-end-line="135" selection-end-column="63" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -789,31 +786,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/overlay.py">
+    <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="20" lean-forward="false" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+        <state relative-caret-position="871">
+          <caret line="135" column="63" lean-forward="false" selection-start-line="135" selection-start-column="63" selection-end-line="135" selection-end-column="63" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+            <marker date="1500403989000" expanded="true" signature="3975:4677" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/send_video.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2503">
-          <caret line="214" column="47" lean-forward="false" selection-start-line="214" selection-start-column="47" selection-end-line="214" selection-end-column="47" />
+        <state relative-caret-position="228">
+          <caret line="215" column="47" lean-forward="false" selection-start-line="215" selection-start-column="47" selection-end-line="215" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
+    <entry file="file://$PROJECT_DIR$/overlay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="135" column="63" lean-forward="false" selection-start-line="135" selection-start-column="63" selection-end-line="135" selection-end-column="63" />
+        <state relative-caret-position="690">
+          <caret line="46" column="24" lean-forward="false" selection-start-line="46" selection-start-column="24" selection-end-line="46" selection-end-column="24" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1500403989000" expanded="true" signature="3975:4677" ph="..." />
           </folding>
         </state>
       </provider>

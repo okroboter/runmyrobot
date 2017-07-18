@@ -16,12 +16,12 @@ parser.set_defaults(lights=False)
 commandArgs = parser.parse_args()
 
 wifiLevels = [-90, -80, -70, -60, 0]
-wifiOverlays = [15, 16, 17, 18, 19]
-lightOverlays = [20, 21, 22, 23, 24, 25]
+wifiOverlays = [14, 15, 16, 17, 18]
+lightOverlays = [19, 20, 21, 22, 23, 24]
 currentWifiLevel = 0
 currentColorLevel = -1
 
-proximityOverlay = 26
+proximityOverlay = 25
 proximityAlert = False
 
 bindAddress = "tcp://localhost:5555"
@@ -44,6 +44,7 @@ def processSignals():
 
     global currentWifiLevel
     global currentColorLevel
+    global proximityAlert
 
     context = zmq.Context()
     requester = context.socket(zmq.REQ)
