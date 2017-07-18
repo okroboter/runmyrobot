@@ -25,6 +25,7 @@ ser = serial.Serial(serialDevice, serialBaud, timeout=1)  # open serial
 marvinWaitSeconds = 90      # Number of seconds to wait before trying a random quote
 marvinLastToggleTime = 0
 marvinLastQuoteTime = 0
+marvinLastColor = 5
 
 # Quotes
 marvinQuotes = [
@@ -115,6 +116,7 @@ def handle_command(command, commandArgs, say):
     global marvinLastQuoteTime
     global marvinWaitSeconds
     global marvinQuotesIndex
+    global marvinLastColor
 
     proximity_alert = ""
 
@@ -155,7 +157,13 @@ def handle_command(command, commandArgs, say):
         curToggleTime = time.time()
         # Throttle changing the lights, so we don't skip one
         if marvinLastToggleTime == 0 or (curToggleTime - marvinLastToggleTime) > 1:
-            sendSerial('T')
+
+            marvinLastColor = 0 if marvinLastColor >= 5 else marvinLastColor + 1
+            sendSerial("@%d" % marvinLastColor)
+            # Write the color to a file for the overlay
+            with open("/dev/shm/lights.txt", "w") as f:
+               f.write(marvinLastColor)
+
         marvinLastToggleTime = curToggleTime
     elif command.startswith('@'):
         sendSerial(command)

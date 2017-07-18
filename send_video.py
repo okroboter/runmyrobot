@@ -203,20 +203,35 @@ def rotationOption():
     # Then create overlay for each cropped point
     # Enable/disable the overlays y referring to them as Parsed_overlay_i
     # where is the filter position (1-based)
-    # Example: Parsed_overlay_8 enable 1, would enable the first crop point
-    return '-i /home/pi/runmyrobot/overlay/wifi_sprite.png \
-        -filter_complex "[0:v]transpose=2,transpose=2[flip]; \
-        [flip]zmq[main]; \
-        [1:v]crop=80:57:0:0[im1]; \
-        [1:v]crop=80:57:80:0[im2]; \
-        [1:v]crop=80:57:160:0[im3]; \
-        [1:v]crop=80:57:240:0[im4]; \
-        [1:v]crop=80:57:320:0[im5]; \
-        [main][im1]overlay=enable=0:x=10:y=10 [ov8]; \
-        [ov8][im2]overlay=enable=0:x=10:y=10[ov9]; \
-        [ov9][im3]overlay=enable=0:x=10:y=10[ov10]; \
-        [ov10][im4]overlay=enable=0:x=10:y=10[ov11]; \
-        [ov11][im5]overlay=enable=0:x=10:y=10"'
+    # Example: Parsed_overlay_14 enable 1, would enable the first wifi crop point
+    # Example: Parsed_overlay_19 enable 1, would enable the first light crop point
+    return ('-i /home/pi/runmyrobot/overlay/wifi_sprite.png '
+            '-i /home/pi/runmyrobot/overlay/lights_sprite.png '
+            '-filter_complex "[0:v]transpose=2,transpose=2[flip]; '
+            '[1:v]crop=80:57:0:0[im1]; '
+            '[1:v]crop=80:57:80:0[im2]; '
+            '[1:v]crop=80:57:160:0[im3]; '
+            '[1:v]crop=80:57:240:0[im4]; '
+            '[1:v]crop=80:57:320:0[im5]; '
+            '[2:v]crop=25:25:0:0[im6]; '
+            '[2:v]crop=25:25:25:0[im7]; '
+            '[2:v]crop=25:25:50:0[im8]; '
+            '[2:v]crop=25:25:75:0[im9]; '
+            '[2:v]crop=25:25:100:0[im10]; '
+            '[2:v]crop=25:25:125:0[im11]; '
+            '[flip]zmq[main]; '
+            '[main][im1]overlay=enable=0:x=10:y=10 [ov14]; '
+            '[ov14][im2]overlay=enable=0:x=10:y=10[ov15]; '
+            '[ov15][im3]overlay=enable=0:x=10:y=10[ov16]; '
+            '[ov16][im4]overlay=enable=0:x=10:y=10[ov17]; '
+            '[ov17][im5]overlay=enable=0:x=10:y=10[ov18]; '
+            '[ov18][im6]overlay=enable=0:x=35:y=75[ov19]; '
+            '[ov19][im7]overlay=enable=0:x=35:y=75[ov20]; '
+            '[ov20][im8]overlay=enable=0:x=35:y=75[ov21]; '
+            '[ov21][im9]overlay=enable=0:x=35:y=75[ov22]; '
+            '[ov22][im10]overlay=enable=0:x=35:y=75[ov23]; '
+            '[ov23][im11]overlay=enable=0:x=35:y=75"')
+
 
     # if commandArgs.video_filter is not None:
     #     # return "-vf %s" % commandArgs.video_filter

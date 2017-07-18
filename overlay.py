@@ -1,3 +1,4 @@
+import os
 import time
 import subprocess
 import argparse
@@ -9,12 +10,16 @@ import zmq
 parser = argparse.ArgumentParser(description='Overlay controls')
 parser.add_argument('--wifi', dest='wifi')
 parser.set_defaults(wifi=None)
+parser.add_argument('--lights', dest='lights', action="store_true")
+parser.set_defaults(lights=False)
 
 commandArgs = parser.parse_args()
 
 wifiLevels = [-90, -80, -70, -60, 0]
 wifiOverlays = [8, 9, 10, 11, 12]
+lightOverlays = [8, 9, 10, 11, 12]
 currentWifiLevel = 0
+currentColorLevel = 0
 
 bindAddress = "tcp://localhost:5555"
 
@@ -25,15 +30,40 @@ def clearSignals(requester):
         message = requester.recv()
         print 'Received reply:[%s]' % message
 
+def clearLights(requester):
+
+    for level in lightOverlays:
+        requester.send("Parsed_overlay_%d enable 0" % level)
+        message = requester.recv()
+        print 'Received reply:[%s]' % message
+
 def processSignals():
 
     global currentWifiLevel
+    global currentColorLevel
 
     context = zmq.Context()
     requester = context.socket(zmq.REQ)
     requester.connect(bindAddress)
 
     while True:
+
+        if commandArgs.lights and os.path.isfile("/dev/shm/lights.txt"):
+
+            # Read the color from a file
+            color = 0
+            with open("/dev/shm/lights.txt", "r") as f:
+                try:
+                    color = int(f.read(1))
+                except:
+                    color = 0
+
+            if color <= 5 and currentWifiLevel != color:
+
+                requester.send("Parsed_overlay_%d enable 1" % wifiOverlays[level])
+                message = requester.recv()
+                print 'Received reply:[%s]' % message
+
 
         if commandArgs.wifi is not None:
 
@@ -66,7 +96,7 @@ def processSignals():
                     clearSignals(requester)
                     currentWifiLevel = level
                     print "New Level: %d\n" % currentWifiLevel
-                    requester.send("Parsed_overlay_% enable 1" % wifiOverlays[wifiOverlays])
+                    requester.send("Parsed_overlay_% enable 1" % wifiOverlays[level])
                     message = requester.recv()
                     print 'Received reply:[%s]' % message
                     # copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")
