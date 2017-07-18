@@ -65,6 +65,9 @@ def processSignals():
             print 'Received reply:[%s]' % message
         elif proximityAlert and not os.path.isfile("/dev/shm/proximityalert.txt"):
             proximityAlert = False
+            requester.send("Parsed_overlay_%d enable 0" % proximityOverlay)
+            message = requester.recv()
+            print 'Received reply:[%s]' % message
 
         if commandArgs.lights and os.path.isfile("/dev/shm/lights.txt"):
 
