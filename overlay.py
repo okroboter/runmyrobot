@@ -16,10 +16,13 @@ parser.set_defaults(lights=False)
 commandArgs = parser.parse_args()
 
 wifiLevels = [-90, -80, -70, -60, 0]
-wifiOverlays = [14, 15, 16, 17, 18]
-lightOverlays = [19, 20, 21, 22, 23, 24]
+wifiOverlays = [15, 16, 17, 18, 19]
+lightOverlays = [20, 21, 22, 23, 24, 25]
 currentWifiLevel = 0
-currentColorLevel = -1 
+currentColorLevel = -1
+
+proximityOverlay = 26
+proximityAlert = False
 
 bindAddress = "tcp://localhost:5555"
 
@@ -53,6 +56,14 @@ def processSignals():
         if os.path.isfile("/dev/shm/videorestart.txt"):
             videoRestarted = True
             os.remove("/dev/shm/videorestart.txt");
+
+        if not proximityAlert and os.path.isfile("/dev/shm/proximityalert.txt"):
+            proximityAlert = True
+            requester.send("Parsed_overlay_%d enable 1" % proximityOverlay)
+            message = requester.recv()
+            print 'Received reply:[%s]' % message
+        elif proximityAlert and not os.path.isfile("/dev/shm/proximityalert.txt"):
+            proximityAlert = False
 
         if commandArgs.lights and os.path.isfile("/dev/shm/lights.txt"):
 

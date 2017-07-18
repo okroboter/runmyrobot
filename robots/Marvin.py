@@ -132,7 +132,11 @@ def handle_command(command, commandArgs, say):
                 proximity_alert = ser.read(2)
                 if proximity_alert != "!F":
                     robot.forward(commandArgs.driving_speed, commandArgs.straight_delay)
+                    if os.path.isfile("/dev/shm/proximityalert.txt"):
+                        os.remove("/dev/shm/proximityalert.txt")
                 else:
+                    with open("/dev/shm/proximityalert.txt", "w") as f:
+                        f.write("alert")
                     say("Proximity alert!")
                 ser.flushInput()
                 break

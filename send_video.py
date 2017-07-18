@@ -212,6 +212,7 @@ def rotationOption():
 
     return ('-i /home/pi/runmyrobot/overlay/wifi_sprite.png '
             '-i /home/pi/runmyrobot/overlay/lights_sprite.png '
+            '-i /home/pi/runmyrobot/overlay/proximity_alert.png '
             '-filter_complex "[0:v]transpose=2,transpose=2[flip];'
             '[1:v]crop=80:57:0:0[im1];'
             '[1:v]crop=80:57:80:0[im2];'
@@ -235,7 +236,8 @@ def rotationOption():
             '[ov20][im8]overlay=enable=0:x=37:y=75[ov21];'
             '[ov21][im9]overlay=enable=0:x=37:y=75[ov22];'
             '[ov22][im10]overlay=enable=0:x=37:y=75[ov23];'
-            '[ov23][im11]overlay=enable=0:x=37:y=75"')
+            '[ov23][im11]overlay=enable=0:x=37:y=75[ov24];'
+            '[ov24][3:v]overlay=enable=0:x=0:y=0"')
 
 
     # if commandArgs.video_filter is not None:
