@@ -48,6 +48,12 @@ def processSignals():
 
     while True:
 
+        # Look for restart file
+        videoRestarted = False
+        if os.path.isfile("/dev/shm/videorestart.txt"):
+            videoRestarted = True
+            os.remove("/dev/shm/videorestart.txt");
+
         if commandArgs.lights and os.path.isfile("/dev/shm/lights.txt"):
 
             # Read the color from a file
@@ -59,8 +65,7 @@ def processSignals():
                     print "Exception reading file: %s" % err
                     color = 0
 
-            # if 5 >= color != currentColorLevel:
-            if color <= 5:
+            if color <= 5 and (color != currentColorLevel or videoRestarted):
 
                 clearLights(requester)
                 currentColorLevel = color
@@ -88,8 +93,7 @@ def processSignals():
             print "Current Level: %d\n" % currentWifiLevel
 
             for level, dbStrength in enumerate(wifiLevels):
-                # if wifiStrength <= dbStrength and currentWifiLevel != level:
-                if wifiStrength <= dbStrength:
+                if wifiStrength <= dbStrength and (currentWifiLevel != level or videoRestarted):
                     clearSignals(requester)
                     currentWifiLevel = level
                     print "New Level: %d\n" % currentWifiLevel
@@ -98,8 +102,7 @@ def processSignals():
                     print 'Received reply:[%s]' % message
                     # copyfile(DIR_SRC + "wifi_%d.png" % level, DIR_DST + "wifi.png")
                     break
-                # elif dbStrength == 0 and currentWifiLevel != len(wifiLevels) - 1:
-                elif dbStrength == 0:
+                elif dbStrength == 0 and (currentWifiLevel != len(wifiLevels) - 1 or videoRestarted):
                     clearSignals(requester)
                     currentWifiLevel = level
                     print "New Max Level: %d\n" % currentWifiLevel

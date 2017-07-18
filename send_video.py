@@ -205,6 +205,11 @@ def rotationOption():
     # where is the filter position (1-based)
     # Example: Parsed_overlay_14 enable 1, would enable the first wifi crop point
     # Example: Parsed_overlay_19 enable 1, would enable the first light crop point
+
+    # Touch a file to indicate restart
+    with open("/dev/shm/videorestart.txt", "w") as f:
+        f.write("restarted");
+
     return ('-i /home/pi/runmyrobot/overlay/wifi_sprite.png '
             '-i /home/pi/runmyrobot/overlay/lights_sprite.png '
             '-filter_complex "[0:v]transpose=2,transpose=2[flip];'
