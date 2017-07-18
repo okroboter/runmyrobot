@@ -15,6 +15,8 @@ parser.set_defaults(lights=False)
 
 commandArgs = parser.parse_args()
 
+timeToSleep = 1
+
 wifiLevels = [-90, -80, -70, -60, 0]
 wifiOverlays = [14, 15, 16, 17, 18]
 lightOverlays = [19, 20, 21, 22, 23, 24]
@@ -128,7 +130,7 @@ def processSignals():
 
             print "Wifi level: %d dBm" % wifiStrength
 
-        time.sleep(2)
+        time.sleep(timeToSleep)
 
 process = Process(target=processSignals)
 process.start()

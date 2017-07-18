@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="00f6e788-00fd-4c19-b336-243a426623b4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/overlay.py" afterPath="$PROJECT_DIR$/overlay.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robots/Marvin.py" afterPath="$PROJECT_DIR$/robots/Marvin.py" />
     </list>
     <ignored path="runmyrobot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="overlay.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="overlay.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/overlay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="69" column="48" lean-forward="false" selection-start-line="69" selection-start-column="48" selection-end-line="69" selection-end-column="48" />
+            <state relative-caret-position="285">
+              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -44,14 +45,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Marvin.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Marvin.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="871">
-              <caret line="135" column="63" lean-forward="false" selection-start-line="135" selection-start-column="63" selection-end-line="135" selection-end-column="63" />
+            <state relative-caret-position="320">
+              <caret line="120" column="4" lean-forward="false" selection-start-line="120" selection-start-column="4" selection-end-line="120" selection-end-column="4" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1500403989000" expanded="true" signature="3975:4677" ph="..." />
+                <marker date="1500405338000" expanded="true" signature="3975:4677" ph="..." />
               </folding>
             </state>
           </provider>
@@ -82,8 +83,8 @@
         <option value="$PROJECT_DIR$/test/send_to_serial_test.py" />
         <option value="$PROJECT_DIR$/controller.py" />
         <option value="$PROJECT_DIR$/send_video.py" />
-        <option value="$PROJECT_DIR$/robots/Marvin.py" />
         <option value="$PROJECT_DIR$/overlay.py" />
+        <option value="$PROJECT_DIR$/robots/Marvin.py" />
       </list>
     </option>
   </component>
@@ -94,7 +95,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="16" />
+    <option name="y" value="83" />
     <option name="width" value="1440" />
     <option name="height" value="873" />
   </component>
@@ -469,7 +471,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
+    <frame x="16" y="83" width="1440" height="873" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24930556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -553,7 +555,7 @@
           <caret line="46" column="52" lean-forward="false" selection-start-line="46" selection-start-column="52" selection-end-line="46" selection-end-column="52" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1500403989000" expanded="true" signature="3975:4677" ph="..." />
+            <marker date="1500405338000" expanded="true" signature="3975:4677" ph="..." />
           </folding>
         </state>
       </provider>
@@ -786,13 +788,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
+    <entry file="file://$PROJECT_DIR$/overlay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="871">
-          <caret line="135" column="63" lean-forward="false" selection-start-line="135" selection-start-column="63" selection-end-line="135" selection-end-column="63" />
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1500403989000" expanded="true" signature="3975:4677" ph="..." />
           </folding>
         </state>
       </provider>
@@ -805,12 +806,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/overlay.py">
+    <entry file="file://$PROJECT_DIR$/robots/Marvin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="69" column="48" lean-forward="false" selection-start-line="69" selection-start-column="48" selection-end-line="69" selection-end-column="48" />
+        <state relative-caret-position="320">
+          <caret line="120" column="4" lean-forward="false" selection-start-line="120" selection-start-column="4" selection-end-line="120" selection-end-column="4" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+            <marker date="1500405338000" expanded="true" signature="3975:4677" ph="..." />
           </folding>
         </state>
       </provider>

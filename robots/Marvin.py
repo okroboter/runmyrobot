@@ -121,8 +121,10 @@ def handle_command(command, commandArgs, say):
     proximity_alert = ""
 
     if command == 'L':
+        thread.start_new_thread(removeProximityAlert, ())
         robot.left(commandArgs.driving_speed, commandArgs.turn_delay)
     elif command == 'R':
+        thread.start_new_thread(removeProximityAlert, ())
         robot.right(commandArgs.driving_speed, commandArgs.turn_delay)
     elif command == 'F':
         sendSerial("!")
@@ -131,9 +133,8 @@ def handle_command(command, commandArgs, say):
             if ser.inWaiting() > 0:
                 proximity_alert = ser.read(2)
                 if proximity_alert != "!F":
+                    thread.start_new_thread(removeProximityAlert, ())
                     robot.forward(commandArgs.driving_speed, commandArgs.straight_delay)
-                    if os.path.isfile("/dev/shm/proximityalert.txt"):
-                        os.remove("/dev/shm/proximityalert.txt")
                 else:
                     with open("/dev/shm/proximityalert.txt", "w") as f:
                         f.write("alert")
@@ -142,6 +143,7 @@ def handle_command(command, commandArgs, say):
                 break
 
     elif command == 'B':
+        thread.start_new_thread(removeProximityAlert, ())
         robot.backward(commandArgs.driving_speed, commandArgs.straight_delay)
     elif command == 'N':
         sendSerial('U')
@@ -195,6 +197,9 @@ def handle_command(command, commandArgs, say):
 
             marvinLastQuoteTime = curQuoteTime
 
+def removeProximityAlert():
+    if os.path.isfile("/dev/shm/proximityalert.txt"):
+        os.remove("/dev/shm/proximityalert.txt")
 
 def sendSerial(command):
     """
