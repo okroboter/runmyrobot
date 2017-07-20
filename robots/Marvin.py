@@ -4,7 +4,8 @@ import serial
 import random
 import thread
 import Robot
-import wolframalpha
+# import wolframalpha
+import requests
 
 LEFT_TRIM   = 0
 RIGHT_TRIM  = 0
@@ -82,15 +83,25 @@ def speak(message, tempFilePath):
         try:
             os.system('echo "Let me check on that for you. Thinking..."' + pipes)
             sendSerial("?")
-            client = wolframalpha.Client(os.environ["WOLFRAM_ID"])
-            result = client.query(message[9:])
-            # Get the first result
-            result = next(result.results).text
-            if result:
-                result = result.encode("ascii", errors="ignore")
-                os.system('echo "' + result + '"' + pipes)
+            payload = {'appid': os.environ['WOLFRAM_ID'], 'i': message[9:]}
+            request = requests.get('https://api.wolframalpha.com/v2/spoken', params=payload)
+
+            if request.status_code == 200:
+                os.system('echo "' + request.text + '"' + pipes)
+            elif request.status_code == 501:
+                os.system('echo "Sorry, I cannot answer that question."' + pipes)
             else:
-                os.system('echo "I don\'t know what you mean"' + pipes)
+                os.system('echo "There was an error. I cannot answer that question."' + pipes)
+
+            # client = wolframalpha.Client(os.environ["WOLFRAM_ID"])
+            # result = client.query(message[9:])
+            # # Get the first result
+            # result = next(result.results).text
+            # if result:
+            #     result = result.encode("ascii", errors="ignore")
+            #     os.system('echo "' + result + '"' + pipes)
+            # else:
+            #     os.system('echo "I don\'t know what you mean"' + pipes)
 
         except Exception, err:
             print err
