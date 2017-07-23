@@ -7,7 +7,7 @@ import Robot
 # import wolframalpha
 import requests
 
-LEFT_TRIM   = 0
+LEFT_TRIM   = -7
 RIGHT_TRIM  = 0
 
 # Create an instance of the robot with the specified trim values.
