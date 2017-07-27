@@ -560,6 +560,11 @@ def say(message):
 def handle_chat_message(args):
 
     print "chat message received:", args
+
+    if robotModule is not None and hasattr(robotModule, 'killswitch'):
+        if robotModule.killswitch(args, True):
+            exit()
+
     rawMessage = args['message']
     withoutName = rawMessage.split(']')[1:]
     message = "".join(withoutName)
@@ -694,7 +699,7 @@ def handle_command(args):
             command = args['command']
 
             if robotModule is not None and hasattr(robotModule, 'handle_command'):
-                robotModule.handle_command(command, commandArgs, say)
+                robotModule.handle_command(command, args, commandArgs, say)
 
             if commandArgs.type == 'adafruit_pwm':
                 moveAdafruitPWM(command)

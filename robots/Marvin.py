@@ -28,6 +28,8 @@ marvinLastToggleTime = 0
 marvinLastQuoteTime = 0
 marvinLastColor = 5
 
+
+
 # Quotes
 marvinQuotes = [
     "Pardon me for breathing, which I never do any way so I don't know why I bother to say it",
@@ -63,6 +65,36 @@ marvinQuotesIndex = 0
 
 # Resort quotes randomly
 random.shuffle(marvinQuotes)
+
+# Read in whitelisted controllers
+vettedUsers = []
+
+def reloadVettedUsers():
+    global vettedUsers
+    if os.path.isfile("/home/pi/runmyrobot/robots/whitelist.txt"):
+        with open("/home/pi/runmyrobot/robots/whitelist.txt") as f:
+            vettedUsers = map(str.strip, f.read().splitlines())
+
+reloadVettedUsers()
+
+def killswitch(args, message = False):
+
+    if os.path.isfile("/dev/shm/killswitch"):
+
+        if os.path.isfile("/dev/shm/whitelist"):
+            reloadVettedUsers()
+            os.remove("/dev/shm/whitelist")
+
+        name = args['name'] if message else args['user']['username']
+
+        if name in vettedUsers:
+            return False
+
+        print "Invalid attempt to control by %s" % name
+        return True
+
+    return False
+
 
 def speak(message, tempFilePath):
     """
@@ -113,7 +145,7 @@ def speak(message, tempFilePath):
         # os.system('cat ' + tempFilePath + ' | espeak --stdout | /usr/local/bin/ffmpeg -i - -ar 44100 -ac 2 -ab 192k -f wav - | aplay -D plughw:0,0')
         os.system('cat ' + tempFilePath + pipes)
 
-def handle_command(command, commandArgs, say):
+def handle_command(command, args, commandArgs, say):
     """
     Override for handling commands from the letsrobot.tv service.
 
@@ -128,6 +160,9 @@ def handle_command(command, commandArgs, say):
     global marvinWaitSeconds
     global marvinQuotesIndex
     global marvinLastColor
+
+    if killswitch(args):
+        return
 
     proximity_alert = ""
 
