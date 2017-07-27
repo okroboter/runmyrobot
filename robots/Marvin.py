@@ -67,22 +67,22 @@ marvinQuotesIndex = 0
 random.shuffle(marvinQuotes)
 
 # Read in whitelisted controllers
-vettedUsers = []
+whitelistUsers = []
 
-def reloadVettedUsers():
-    global vettedUsers
+def reloadWhitelistUsers():
+    global whitelistUsers
     if os.path.isfile("/home/pi/runmyrobot/robots/whitelist.txt"):
         with open("/home/pi/runmyrobot/robots/whitelist.txt") as f:
-            vettedUsers = map(str.strip, f.read().splitlines())
+            whitelistUsers = map(str.strip, f.read().splitlines())
 
-reloadVettedUsers()
+reloadWhitelistUsers()
 
 def killswitch(args, say, message=None):
 
     name = args['name'] if message else args['user']['username']
 
     if message:
-        if name in vettedUsers:
+        if name in whitelistUsers:
             if message.strip() == "/kswitch":
                 os.system("touch /dev/shm/killswitch")
                 say("Kill Switch Activated")
@@ -95,10 +95,10 @@ def killswitch(args, say, message=None):
     if os.path.isfile("/dev/shm/killswitch"):
 
         if os.path.isfile("/dev/shm/whitelist"):
-            reloadVettedUsers()
+            reloadWhitelistUsers()
             os.remove("/dev/shm/whitelist")
 
-        if name in vettedUsers:
+        if name in whitelistUsers:
             return False
 
         print "Invalid attempt to control by %s" % name
