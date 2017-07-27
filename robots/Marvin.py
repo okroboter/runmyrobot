@@ -77,15 +77,26 @@ def reloadVettedUsers():
 
 reloadVettedUsers()
 
-def killswitch(args, message = False):
+def killswitch(args, say, message=None):
+
+    name = args['name'] if message else args['user']['username']
+
+    if message:
+        if name in vettedUsers:
+            if message.strip() == "/kswitch":
+                os.system("touch /dev/shm/killswitch")
+                say("Kill Switch Activated")
+                return True
+            elif message.strip() == "/lswitch":
+                os.system("rm /dev/shm/killswitch")
+                say("Kill Switch Deactivated")
+                return True
 
     if os.path.isfile("/dev/shm/killswitch"):
 
         if os.path.isfile("/dev/shm/whitelist"):
             reloadVettedUsers()
             os.remove("/dev/shm/whitelist")
-
-        name = args['name'] if message else args['user']['username']
 
         if name in vettedUsers:
             return False
@@ -161,7 +172,7 @@ def handle_command(command, args, commandArgs, say):
     global marvinQuotesIndex
     global marvinLastColor
 
-    if killswitch(args):
+    if killswitch(args, say):
         return
 
     proximity_alert = ""
